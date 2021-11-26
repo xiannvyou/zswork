@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>life.zs</groupId>
+    <artifactId>zswork</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0.0</version>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.2.6.RELEASE</version>
+    </parent>
+
+    <modules>
+        <module>utils</module>
+        <module>reptile</module>
+        <module>database</module>
+    </modules>
+
+    <properties>
+        <skipTests>true</skipTests>
+        <commons.lang3.version>3.9</commons.lang3.version>
+        <fastjson.version>1.2.62</fastjson.version>
+        <guava.version>20.0</guava.version>
+        <reflectasm.version>1.11.3</reflectasm.version>
+        <commons.collections.version>4.3</commons.collections.version>
+        <druid.version>1.1.17</druid.version>
+        <redisson.version>3.14.0</redisson.version>
+        <redis.exclude.version>redisson-spring-data-23</redis.exclude.version>
+        <mybatis-plus.version>3.4.1</mybatis-plus.version>
+        <freemarker.version>2.3.28</freemarker.version>
+        <sharding-sphere.version>4.1.1</sharding-sphere.version>
+        <mysql.version>8.0.15</mysql.version>
+        <easyexcel.version>2.2.10</easyexcel.version>
+        <lombok.version>1.18.6</lombok.version>
+        <ok.http.version>5.0.0-alpha.3</ok.http.version>
+        <jsoup.version>1.12.1</jsoup.version>
+    </properties>
+
+   <dependencyManagement>
+       <dependencies>
+           <!-- 分库分表 -->
+           <dependency>
+               <groupId>org.apache.shardingsphere</groupId>
+               <artifactId>sharding-jdbc-spring-boot-starter</artifactId>
+               <version>${sharding-sphere.version}</version>
+           </dependency>
+           <dependency>
+               <groupId>org.apache.shardingsphere</groupId>
+               <artifactId>sharding-jdbc-spring-namespace</artifactId>
+               <version>${sharding-sphere.version}</version>
+           </dependency>
+
+           <!--sql-->
+           <dependency>
+               <groupId>mysql</groupId>
+               <artifactId>mysql-connector-java</artifactId>
+               <version>${mysql.version}</version>
+           </dependency>
+           <!-- druid -->
+           <dependency>
+               <groupId>com.alibaba</groupId>
+               <artifactId>druid</artifactId>
+               <version>${druid.version}</version>
+           </dependency>
+
+           <!-- mybatis-plus -->
+           <dependency>
+               <groupId>com.baomidou</groupId>
+               <artifactId>mybatis-plus-boot-starter</artifactId>
+               <version>${mybatis-plus.version}</version>
+           </dependency>
+           <dependency>
+               <groupId>com.baomidou</groupId>
+               <artifactId>mybatis-plus-generator</artifactId>
+               <version>${mybatis-plus.version}</version>
+           </dependency>
+
+           <!--模版方法-->
+           <dependency>
+               <groupId>org.freemarker</groupId>
+               <artifactId>freemarker</artifactId>
+               <version>${freemarker.version}</version>
+           </dependency>
+
+           <!-- redisson -->
+           <dependency>
+               <groupId>org.redisson</groupId>
+               <artifactId>redisson-spring-data-21</artifactId>
+               <version>${redisson.version}</version>
+           </dependency>
+           <dependency>
+               <groupId>org.redisson</groupId>
+               <artifactId>redisson-spring-boot-starter</artifactId>
+               <exclusions>
+                   <exclusion>
+                       <groupId>org.redisson</groupId>
+                       <artifactId>${redis.exclude.version}</artifactId>
+                   </exclusion>
+               </exclusions>
+               <version>${redisson.version}</version>
+           </dependency>
+           <dependency>
+               <groupId>org.springframework.boot</groupId>
+               <artifactId>spring-boot-starter-data-redis</artifactId>
+               <exclusions>
+                   <exclusion>
+                       <groupId>redis.clients</groupId>
+                       <artifactId>jedis</artifactId>
+                   </exclusion>
+               </exclusions>
+           </dependency>
+
+           <dependency>
+               <groupId>org.projectlombok</groupId>
+               <artifactId>lombok</artifactId>
+               <version>${lombok.version}</version>
+               <optional>true</optional>
+           </dependency>
+
+           <dependency>
+               <groupId>org.apache.commons</groupId>
+               <artifactId>commons-collections4</artifactId>
+               <version>${commons.collections.version}</version>
+           </dependency>
+           <dependency>
+               <groupId>org.apache.commons</groupId>
+               <artifactId>commons-lang3</artifactId>
+               <version>${commons.lang3.version}</version>
+           </dependency>
+
+
+
+           <!--reflectasm-->
+           <dependency>
+               <groupId>com.esotericsoftware</groupId>
+               <artifactId>reflectasm</artifactId>
+               <version>${reflectasm.version}</version>
+           </dependency>
+           <dependency>
+               <groupId>com.alibaba</groupId>
+               <artifactId>fastjson</artifactId>
+               <version>${fastjson.version}</version>
+           </dependency>
+
+           <!-- easyexcel -->
+           <dependency>
+               <groupId>com.alibaba</groupId>
+               <artifactId>easyexcel</artifactId>
+               <version>${easyexcel.version}</version>
+           </dependency>
+
+           <!-- https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp -->
+           <dependency>
+               <groupId>com.squareup.okhttp3</groupId>
+               <artifactId>okhttp</artifactId>
+               <version>${ok.http.version}</version>
+           </dependency>
+
+           <!-- guava -->
+           <dependency>
+               <groupId>com.google.guava</groupId>
+               <artifactId>guava</artifactId>
+               <version>${guava.version}</version>
+           </dependency>
+
+           <!--html-->
+           <dependency>
+               <groupId>org.jsoup</groupId>
+               <artifactId>jsoup</artifactId>
+               <version>${jsoup.version}</version>
+           </dependency>
+
+       </dependencies>
+   </dependencyManagement>
+
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <encoding>UTF-8</encoding>
+                    <compilerArgument>-parameters</compilerArgument>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
