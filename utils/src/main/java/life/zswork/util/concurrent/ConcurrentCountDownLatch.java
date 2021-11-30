@@ -24,14 +24,16 @@ public class ConcurrentCountDownLatch {
         this.condition = this.lock.newCondition();
     }
 
-    public synchronized void countDown() {
+    public  void countDown() {
         adder.decrement();
-        if (adder.sum() <= 0) {
-            lock.lock();
-            try {
-                condition.signal();
-            } finally {
-                lock.unlock();
+        synchronized (this){
+            if (adder.sum() <= 0) {
+                lock.lock();
+                try {
+                    condition.signal();
+                } finally {
+                    lock.unlock();
+                }
             }
         }
     }
