@@ -2,6 +2,7 @@ package life.zswork.util.dac;
 
 
 import life.zswork.util.concurrent.ConcurrentCountDownLatch;
+import org.apache.commons.collections4.CollectionUtils;
 
 import java.time.Duration;
 import java.util.List;
@@ -60,6 +61,9 @@ public class SumList<E> {
     }
 
     public void parallelForeach(Consumer<List<E>> consumer) {
+        if (CollectionUtils.isEmpty(list)){
+            return;
+        }
         ExecutorService service = Optional.ofNullable(executor).orElse(SumFuture.pool);
         List<Future<?>> futureList = new CopyOnWriteArrayList<>();
         ConcurrentCountDownLatch countDownLatch = new ConcurrentCountDownLatch(list.size());
@@ -93,6 +97,9 @@ public class SumList<E> {
     @SuppressWarnings("unchecked")
     public <U> U parallelReduce(U identity, BiFunction<U, ? super List<E>, U> accumulator,
                                 BinaryOperator<U> combiner) {
+        if (CollectionUtils.isEmpty(list)){
+            return identity;
+        }
         List<Future<?>> futureList = new CopyOnWriteArrayList<>();
         ConcurrentCountDownLatch countDownLatch = new ConcurrentCountDownLatch(list.size());
         AtomicBoolean wef = new AtomicBoolean(true);
