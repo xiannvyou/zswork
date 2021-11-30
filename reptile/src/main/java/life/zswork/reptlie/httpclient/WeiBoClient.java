@@ -92,6 +92,7 @@ public class WeiBoClient {
 
     public List<WeiBoUserDTO> getUserDetail(Long txtId) {
         try {
+            log.info("{}",txtId);
             Response response = client.newCall(new Request.Builder().url(String.format(commentUrl, txtId)).build()).execute();
             if (response.isSuccessful()) {
                 CommentDetailDTO commentDetailDTO = JSON.parseObject(response.body().string(), CommentDetailDTO.class);

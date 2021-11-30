@@ -67,22 +67,22 @@ public class SumSingle<E> {
         ConcurrentCountDownLatch countDownLatch = new ConcurrentCountDownLatch(list.size());
         AtomicBoolean wef = new AtomicBoolean(true);
         AbstractRunnableWrapper runner = Optional.ofNullable(runnableWrapper).orElse(SumFuture.runnableWrapper);
-        list.forEach(es ->
-                futureList.add(service.submit(runner.of(() -> {
-                            try {
-                                if (wef.get()) {
-                                    consumer.accept(es);
-                                }
-                            } catch (Throwable e) {
-                                futureList.forEach(future -> future.cancel(true));
-                                wef.set(false);
-                                countDownLatch.exception(e);
-                            } finally {
-                                countDownLatch.countDown();
-                            }
-                        })
-                )));
         try {
+            list.forEach(es ->
+                    futureList.add(service.submit(runner.of(() -> {
+                                try {
+                                    if (wef.get()) {
+                                        consumer.accept(es);
+                                    }
+                                } catch (Throwable e) {
+                                    futureList.forEach(future -> future.cancel(true));
+                                    wef.set(false);
+                                    countDownLatch.exception(e);
+                                } finally {
+                                    countDownLatch.countDown();
+                                }
+                            })
+                    )));
             if (Objects.nonNull(timeout)) {
                 countDownLatch.await(timeout);
             } else {
@@ -104,22 +104,22 @@ public class SumSingle<E> {
         AtomicBoolean wef = new AtomicBoolean(true);
         ExecutorService service = Optional.ofNullable(executor).orElse(SumFuture.pool);
         AbstractRunnableWrapper runner = Optional.ofNullable(runnableWrapper).orElse(SumFuture.runnableWrapper);
-        list.forEach(es ->
-                futureList.add(service.submit(runner.of(() -> {
-                            try {
-                                if (wef.get()) {
-                                    combiner.apply(accumulator.apply(identity, es), identity);
-                                }
-                            } catch (Throwable e) {
-                                futureList.forEach(future -> future.cancel(true));
-                                wef.set(false);
-                                countDownLatch.exception(e);
-                            } finally {
-                                countDownLatch.countDown();
-                            }
-                        })
-                )));
         try {
+            list.forEach(es ->
+                    futureList.add(service.submit(runner.of(() -> {
+                                try {
+                                    if (wef.get()) {
+                                        combiner.apply(accumulator.apply(identity, es), identity);
+                                    }
+                                } catch (Throwable e) {
+                                    futureList.forEach(future -> future.cancel(true));
+                                    wef.set(false);
+                                    countDownLatch.exception(e);
+                                } finally {
+                                    countDownLatch.countDown();
+                                }
+                            })
+                    )));
             if (Objects.nonNull(timeout)) {
                 countDownLatch.await(timeout);
             } else {

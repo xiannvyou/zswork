@@ -21,10 +21,10 @@ public class SumFuture {
     private AbstractRunnableWrapper wrapper;
 
     static {
-        pool = new ForkJoinPool(Optional.ofNullable(System.getProperty("com.ypsx.kernel.lightning.dac.pool.parallelism"))
+        pool = new ForkJoinPool(Optional.ofNullable(System.getProperty("dac.pool.parallelism"))
                 .map(Integer::getInteger)
                 .orElse(Runtime.getRuntime().availableProcessors() * 2));
-        runnableWrapper = Optional.ofNullable(System.getProperty("com.ypsx.kernel.lightning.dac.runnableWrapper"))
+        runnableWrapper = Optional.ofNullable(System.getProperty("dac.runnableWrapper"))
                 .map(path -> {
                     try {
                         return (AbstractRunnableWrapper) ClassLoader.getSystemClassLoader().loadClass(path).newInstance();
