@@ -8,6 +8,7 @@ import life.zswork.reptlie.dto.WeiBoUserDTO;
 import life.zswork.reptlie.httpclient.WeiBoClient;
 import life.zswork.util.dac.SumFuture;
 import life.zswork.util.excel.ExcelFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("weibo")
+@Slf4j
 public class WeiBoController {
 
     @Resource
@@ -51,6 +53,7 @@ public class WeiBoController {
                     });
                     return l;
                 }, (u, p) -> u);
+        log.info("{}",weiBoUserDTOList);
         ByteArrayOutputStream excel = ExcelFactory.createExcel(weiBoUserDTOList.stream().distinct().collect(Collectors.toList()), Sets.newHashSet());
         try {
             FileOutputStream fileOutputStream = new FileOutputStream("/Users/z_shuai/Documents/project/1.xlsx");

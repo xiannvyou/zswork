@@ -7,9 +7,7 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
@@ -63,10 +61,16 @@ public class SumSingle<E> {
             return;
         }
         ExecutorService service = Optional.ofNullable(executor).orElse(SumFuture.pool);
+        AbstractRunnableWrapper runner = Optional.ofNullable(runnableWrapper).orElse(SumFuture.runnableWrapper);
+        if (Thread.currentThread() instanceof ForkJoinWorkerThread && service instanceof ForkJoinPool) {
+            list.forEach(es -> runner.of(() ->
+                    consumer.accept(es)
+            ).run());
+            return;
+        }
         List<Future<?>> futureList = new CopyOnWriteArrayList<>();
         ConcurrentCountDownLatch countDownLatch = new ConcurrentCountDownLatch(list.size());
         AtomicBoolean wef = new AtomicBoolean(true);
-        AbstractRunnableWrapper runner = Optional.ofNullable(runnableWrapper).orElse(SumFuture.runnableWrapper);
         try {
             list.forEach(es ->
                     futureList.add(service.submit(runner.of(() -> {
@@ -99,11 +103,18 @@ public class SumSingle<E> {
         if (CollectionUtils.isEmpty(list)) {
             return identity;
         }
+        ExecutorService service = Optional.ofNullable(executor).orElse(SumFuture.pool);
+        AbstractRunnableWrapper runner = Optional.ofNullable(runnableWrapper).orElse(SumFuture.runnableWrapper);
+        if (Thread.currentThread() instanceof ForkJoinWorkerThread
+                && service instanceof ForkJoinPool) {
+            list.forEach(es -> runner.of(() ->
+                    combiner.apply(accumulator.apply(identity, es), identity)
+            ).run());
+            return identity;
+        }
         List<Future<?>> futureList = new CopyOnWriteArrayList<>();
         ConcurrentCountDownLatch countDownLatch = new ConcurrentCountDownLatch(list.size());
         AtomicBoolean wef = new AtomicBoolean(true);
-        ExecutorService service = Optional.ofNullable(executor).orElse(SumFuture.pool);
-        AbstractRunnableWrapper runner = Optional.ofNullable(runnableWrapper).orElse(SumFuture.runnableWrapper);
         try {
             list.forEach(es ->
                     futureList.add(service.submit(runner.of(() -> {
