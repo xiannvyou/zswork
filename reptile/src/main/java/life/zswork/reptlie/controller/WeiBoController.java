@@ -53,10 +53,9 @@ public class WeiBoController {
                     });
                     return l;
                 }, (u, p) -> u);
-        log.info("{}",weiBoUserDTOList);
         ByteArrayOutputStream excel = ExcelFactory.createExcel(weiBoUserDTOList.stream().distinct().collect(Collectors.toList()), Sets.newHashSet());
         try {
-            FileOutputStream fileOutputStream = new FileOutputStream("/Users/z_shuai/Documents/project/1.xlsx");
+            FileOutputStream fileOutputStream = new FileOutputStream("/Users/z_shuai/Documents/project/" + key + ".xlsx");
             fileOutputStream.write(excel.toByteArray());
         } catch (Exception e) {
             return ResponseEntity.status(400).body("fail");
