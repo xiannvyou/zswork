@@ -1,0 +1,16 @@
+server:
+  port: 222
+  undertow:
+    max-http-post-size: 10240KB
+    io-threads: 2
+    worker-threads: 4
+    buffer-size: 1024
+    direct-buffers: true
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 50MB
+      max-request-size: 50MB
+fdfs:
+  so-timeout: 1500
+  connect-timeout: 600

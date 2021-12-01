@@ -23,6 +23,7 @@
     </modules>
 
     <properties>
+        <zswork.utils.version>1.0.0</zswork.utils.version>
         <skipTests>true</skipTests>
         <commons.lang3.version>3.9</commons.lang3.version>
         <fastjson.version>1.2.62</fastjson.version>
@@ -40,10 +41,17 @@
         <lombok.version>1.18.6</lombok.version>
         <ok.http.version>5.0.0-alpha.3</ok.http.version>
         <jsoup.version>1.12.1</jsoup.version>
+        <fastdfs.version>1.26.7</fastdfs.version>
     </properties>
 
    <dependencyManagement>
        <dependencies>
+
+           <dependency>
+               <groupId>life.zs</groupId>
+               <artifactId>utils</artifactId>
+               <version>${zswork.utils.version}</version>
+           </dependency>
            <!-- 分库分表 -->
            <dependency>
                <groupId>org.apache.shardingsphere</groupId>
@@ -176,10 +184,24 @@
                <version>${jsoup.version}</version>
            </dependency>
 
+           <!-- fastdfs java依赖 -->
+           <dependency>
+               <groupId>com.github.tobato</groupId>
+               <artifactId>fastdfs-client</artifactId>
+               <version>${fastdfs.version}</version>
+           </dependency>
+
+
        </dependencies>
    </dependencyManagement>
 
 
+    <repositories>
+        <repository>
+            <id>aliyun</id>
+            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+        </repository>
+    </repositories>
 
     <build>
         <plugins>
