@@ -3,6 +3,7 @@ package life.zswork.util.concurrent;
 import java.time.Duration;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
@@ -14,7 +15,8 @@ public class ConcurrentCountDownLatch {
     private final LongAdder adder;
     private final Condition condition;
     private final ReentrantLock lock;
-    private Throwable e;
+    private volatile Throwable e;
+    private volatile int finish = 0;
 
     public ConcurrentCountDownLatch(int size) {
         LongAdder longAdder = new LongAdder();
@@ -24,13 +26,17 @@ public class ConcurrentCountDownLatch {
         this.condition = this.lock.newCondition();
     }
 
-    public  void countDown() {
+    public void countDown() {
         adder.decrement();
-        synchronized (this){
+        synchronized (this) {
+            if (finish > 0) {
+                return;
+            }
             if (adder.sum() <= 0) {
                 lock.lock();
                 try {
                     condition.signal();
+                    finish++;
                 } finally {
                     lock.unlock();
                 }
