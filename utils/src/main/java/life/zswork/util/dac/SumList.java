@@ -5,6 +5,7 @@ import life.zswork.util.concurrent.ConcurrentCountDownLatch;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.time.Duration;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -70,7 +71,7 @@ public class SumList<E> {
             ).run());
             return;
         }
-        List<Future<?>> futureList = new CopyOnWriteArrayList<>();
+        List<Future<?>> futureList = new LinkedList<>();
         ConcurrentCountDownLatch countDownLatch = new ConcurrentCountDownLatch(list.size());
         AtomicBoolean wef = new AtomicBoolean(true);
         try {
@@ -114,7 +115,7 @@ public class SumList<E> {
             ).run());
             return identity;
         }
-        List<Future<?>> futureList = new CopyOnWriteArrayList<>();
+        List<Future<?>> futureList = new LinkedList<>();
         ConcurrentCountDownLatch countDownLatch = new ConcurrentCountDownLatch(list.size());
         AtomicBoolean wef = new AtomicBoolean(true);
         try {

@@ -72,6 +72,5 @@ public class SumResultMap {
 
     protected void put(int index, Object o) {
         sumResultMap.put(index, o);
-
     }
 }

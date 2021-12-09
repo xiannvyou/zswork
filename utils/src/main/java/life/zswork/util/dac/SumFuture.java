@@ -63,7 +63,7 @@ public class SumFuture {
     protected SumFuture() {
         this.sumResultMap = SumResultMap.build();
         this.index = new AtomicInteger(-1);
-        this.runnableList = new CopyOnWriteArrayList<>();
+        this.runnableList = new LinkedList<>();
         this.threadNum = new AtomicInteger(0);
     }
 
@@ -85,7 +85,7 @@ public class SumFuture {
     public <T> SumFuture listChain(List<T> list, int partition, Function<List<T>, List<?>> function) {
         List<List<T>> subList = new ArrayList<>(10);
         subList(list, subList, partition);
-        List<Object> l = new CopyOnWriteArrayList<>();
+        List<Object> l = Collections.synchronizedList(new ArrayList<>());
         AbstractRunnableWrapper runner = Optional.ofNullable(wrapper).orElse(runnableWrapper);
         subList.forEach(es -> runnableList.add(runner.of(() ->
                 l.addAll(function.apply(es))
@@ -179,7 +179,7 @@ public class SumFuture {
         }
         ConcurrentCountDownLatch countDownLatch = new ConcurrentCountDownLatch(runnableList.size());
         AtomicBoolean wef = new AtomicBoolean(true);
-        List<Future<?>> futureList = new CopyOnWriteArrayList<>();
+        List<Future<?>> futureList = new LinkedList<>();
         for (Runnable runnable : runnableList) {
             ExecutorService service = Optional.ofNullable(executor).orElse(pool);
             futureList.add(service.submit(() -> {
